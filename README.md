@@ -1,4 +1,4 @@
-# fa-node
+# [fa-node](https://github.com/mcrocks999/fa-node)
 FurAffinity wrapper for NodeJS
 
 > Currently supports getting recent content and searching up content.
