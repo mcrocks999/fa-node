@@ -22,7 +22,7 @@ fapi.recent(category,function(data){
 
 To search up content:
 ```javascript
-var queryample';
+var query = 'example';
 fapi.search(query,function(data){
 	if (!data.success) {
 		msg.reply('An error occured! `'+data.error+'`');
@@ -37,13 +37,13 @@ fapi.search(query,function(data){
 On success:
 ```json
 {
-	success: true,
-	title: 'content title',
-	url: 'url_pointing_to_resource',
-	src: 'url_pointing_to_directly_to_image_File',
-	artist: {
-		url: 'url_pointing_to_artist',
-		name: 'artist_name'
+	"success": true,
+	"title": "content title",
+	"url": "url_pointing_to_resource",
+	"src": "url_pointing_to_directly_to_image_File",
+	"artist": {
+		"url": "url_pointing_to_artist",
+		"name": "artist_name"
 	}
 }
 ```
@@ -51,9 +51,9 @@ On success:
 On failure:
 ```json
 {
-	success: false,
-	err: ERROR_ID_SEE_BELOW,
-	error: 'error message'
+	"success": false,
+	"err": 0,
+	"error": "error message"
 }
 ```
 
