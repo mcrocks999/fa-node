@@ -68,7 +68,16 @@ function get_recent(type,callback) {
 		const $ = cheerio.load(body);
 		var artwork = $('.old-table-emulation').eq(type).first().children('div.body').first().children('section').first().children();
 		const $$ = cheerio.load(artwork.toString());
-		var a = $$('figure.r-general.t-image');
+		switch (type) {
+			case 1:
+				var a = $$('figure.r-general.t-text');
+				break;
+			case 2:
+				var a = $$('figure.r-general.t-audio');
+				break;
+			default:
+				var a = $$('figure.r-general.t-image');
+		}
 		callback(figure(a));
 	});
 }
