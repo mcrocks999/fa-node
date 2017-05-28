@@ -5,13 +5,22 @@ FurAffinity wrapper for NodeJS
 
 ## Usage
 
+Disabling or customizing cache settings:
+
+```javascript
+var furaffinity = require('furaffinity');
+furaffinity.settings.cache.enabled = true; // Default: true, boolean whether cache should be used
+furaffinity.settings.cache.seconds = 120; // Default: 120, time in seconds to keep pages
+```
+
 To get the most recent content:
 
 > Categories are a variable in the following example.
 
 ```javascript
+var furaffinity = require('furaffinity');
 var category = (['artwork','writing','music','crafts'])[0];
-fapi.recent(category,function(data){
+furaffinity.recent(category,function(data){
 	if (!data.success) {
 		msg.reply('An error occured! `'+data.error+'`');
 		return;
@@ -22,8 +31,9 @@ fapi.recent(category,function(data){
 
 To search up content:
 ```javascript
+var furaffinity = require('furaffinity');
 var query = 'example';
-fapi.search(query,function(data){
+furaffinity.search(query,function(data){
 	if (!data.success) {
 		msg.reply('An error occured! `'+data.error+'`');
 		return;
