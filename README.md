@@ -1,7 +1,9 @@
 # [fa-node](https://github.com/mcrocks999/fa-node)
 FurAffinity wrapper for NodeJS
 
-> Currently supports getting recent content and searching up content.
+[![NPM](https://nodei.co/npm/furaffinity.png)](https://nodei.co/npm/furaffinity/)
+
+[![npm](https://img.shields.io/npm/v/npm.svg)](https://www.npmjs.com/package/furaffinity) [![npm](https://img.shields.io/npm/dt/furaffinity.svg)](https://www.npmjs.com/package/furaffinity)
 
 ## Usage
 
@@ -19,7 +21,7 @@ To get the most recent content:
 
 ```javascript
 var furaffinity = require('furaffinity');
-var category = (['artwork','writing','music','crafts'])[0];
+var category = (['artwork','writing','music','crafts','all'])[0];
 furaffinity.recent(category,function(data){
 	if (!data.success) {
 		msg.reply('An error occured! `'+data.error+'`');

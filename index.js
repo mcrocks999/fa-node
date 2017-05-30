@@ -66,17 +66,12 @@ function figure(s) {
 function get_recent(type,callback) {
 	req('https://furaffinity.net', 'GET', function(body) {
 		const $ = cheerio.load(body);
-		var artwork = $('.old-table-emulation').eq(type).first().children('div.body').first().children('section').first().children();
-		const $$ = cheerio.load(artwork.toString());
-		switch (type) {
-			case 1:
-				var a = $$('figure.r-general.t-text');
-				break;
-			case 2:
-				var a = $$('figure.r-general.t-audio');
-				break;
-			default:
-				var a = $$('figure.r-general.t-image');
+		if (type<4) {
+			var artwork = $('.old-table-emulation').eq(type).first().children('div.body').first().children('section').first().children();
+			const $$ = cheerio.load(artwork.toString());
+			var a = $$('figure.r-general');
+		} else {
+			var a = $('figure.r-general');
 		}
 		callback(figure(a));
 	});
@@ -96,6 +91,7 @@ module.exports = {
 			case 'writing': get_recent(1,callback); break;
 			case 'music': get_recent(2,callback); break;
 			case 'crafts': get_recent(3,callback); break;
+			case 'any': get_recent(4,callback); break;
 			default:
 				callback({success:false,error:'That is not a valid type!'});
 		}
