@@ -38,6 +38,7 @@ function req(url, method, callback, q) {
 		callback(cache[url+'?q='+q].body);
 	}
 }
+
 function remold() {
 	for (var i=0;i<cache.length;i++) {
 		var now = Date.now() / 1000 | 0;
@@ -48,24 +49,38 @@ function remold() {
 setInterval(function(){
 	remold();
 },1000*(settings.cache.seconds/4));
-function figure(s) {
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
+function figure(s,l = 100) {
 	if (s.length<1) {
 		return {success:false,error:'No content found!'};
 	};
-	var a = cheerio.load(s.eq(Math.floor(Math.random()*(s.length-1))).first().toString());
-	var data = {
-		src: 'https:'+a('img').first().attr('src'),
-		url: 'https://furaffinity.net'+a('a').first().attr('href'),
-		title: a('a').eq(1).first().attr('title'),
-		artist: {
-			name: a('a').last().attr('title'),
-			url: 'https://furaffinity.net'+a('a').last().attr('href')
-		},
-		success: true
-	};
-	return data;
+	var figures = [];
+	for (var i=0;i<s.length;i++) {
+		var a = cheerio.load(s.eq(i).first().toString());
+		var data = {
+			src: 'https:'+a('img').first().attr('src'),
+			url: 'https://furaffinity.net'+a('a').first().attr('href'),
+			title: a('a').eq(1).first().attr('title'),
+			artist: {
+				name: a('a').last().attr('title'),
+				url: 'https://furaffinity.net'+a('a').last().attr('href')
+			}
+		};
+		figures.push(data);
+	}
+	figures = shuffleArray(figures);
+	figures.slice(0,l);
+	return {success:true,figures};
 }
-function get_recent(type,callback) {
+function get_recent(type,limit,callback) {
 	req('https://furaffinity.net', 'GET', function(body,err) {
 		if (err) return callback({success:false,error:'Could not connect!'});
 		const $ = cheerio.load(body);
@@ -76,31 +91,31 @@ function get_recent(type,callback) {
 		} else {
 			var a = $('figure.r-general');
 		}
-		callback(figure(a));
+		callback(figure(a,limit));
 	});
 }
-function get_search(q,callback) {
+function get_search(q,limit,callback) {
 	req('https://www.furaffinity.net/search/', 'POST', function(body,err) {
 		if (err) return callback({success:false,error:'Could not connect!'});
 		const $ = cheerio.load(body);
 		var s = $('figure.r-general.t-image');
-		callback(figure(s));
+		callback(figure(s,limit));
 	}, q);
 }
 module.exports = {
 	settings,
-	recent: function (type,callback) {
+	recent: function (type,limit,callback) {
 		switch (type) {
-			case 'artwork': get_recent(0,callback); break;
-			case 'writing': get_recent(1,callback); break;
-			case 'music': get_recent(2,callback); break;
-			case 'crafts': get_recent(3,callback); break;
-			case 'any': get_recent(4,callback); break;
+			case 'artwork': get_recent(0,limit,callback); break;
+			case 'writing': get_recent(1,limit,callback); break;
+			case 'music': get_recent(2,limit,callback); break;
+			case 'crafts': get_recent(3,limit,callback); break;
+			case 'any': get_recent(4,limit,callback); break;
 			default:
 				callback({success:false,error:'That is not a valid type!'});
 		}
 	},
-	search: function (query,callback) {
-		get_search(query,callback);
+	search: function (query,limit,callback) {
+		get_search(query,limit,callback);
 	}
 };

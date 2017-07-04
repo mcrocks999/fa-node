@@ -22,7 +22,7 @@ To get the most recent content:
 ```javascript
 var furaffinity = require('furaffinity');
 var category = (['artwork','writing','music','crafts','all'])[0];
-furaffinity.recent(category,function(data){
+furaffinity.recent(category,limit,function(data){
 	if (!data.success) {
 		// handle data.error
 		return;
@@ -35,7 +35,7 @@ To search up content:
 ```javascript
 var furaffinity = require('furaffinity');
 var query = 'example';
-furaffinity.search(query,function(data){
+furaffinity.search(query,limit,function(data){
 	if (!data.success) {
 		// handle data.error
 		return;
@@ -50,13 +50,17 @@ On success:
 ```json
 {
 	"success": true,
-	"title": "content title",
-	"url": "url_pointing_to_resource",
-	"src": "url_pointing_to_directly_to_image_File",
-	"artist": {
-		"url": "url_pointing_to_artist",
-		"name": "artist_name"
-	}
+	"figures": [
+		{
+			"title": "content title",
+			"url": "url_pointing_to_resource",
+			"src": "url_pointing_to_directly_to_image_File",
+			"artist": {
+				"url": "url_pointing_to_artist",
+				"name": "artist_name"
+			}
+		}
+	]
 }
 ```
 
