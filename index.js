@@ -21,12 +21,14 @@ function req(url, method, callback, q) {
 		switch (method) {
 			case 'POST':
 				request.post({url:'https://www.furaffinity.net/search/', form: {q}}, function(err,httpResponse,body) {
+					if (err) return callback(false,err);
 					if (settings.cache.enabled) cache[url+'?q='+q] = {expire:now+settings.cache.seconds,body};
 					callback(body);
 				});
 				break;
 			case 'GET':
-				request('https://furaffinity.net', function (error, response, body) {
+				request('https://furaffinity.net', function (err, response, body) {
+					if (err) return callback(false,err);
 					if (settings.cache.enabled) cache[url+'?q='+q] = {expire:now+settings.cache.seconds,body};
 					callback(body);
 				});
@@ -64,7 +66,8 @@ function figure(s) {
 	return data;
 }
 function get_recent(type,callback) {
-	req('https://furaffinity.net', 'GET', function(body) {
+	req('https://furaffinity.net', 'GET', function(body,err) {
+		if (err) return callback({success:false,error:'Could not connect!'});
 		const $ = cheerio.load(body);
 		if (type<4) {
 			var artwork = $('.old-table-emulation').eq(type).first().children('div.body').first().children('section').first().children();
@@ -77,7 +80,8 @@ function get_recent(type,callback) {
 	});
 }
 function get_search(q,callback) {
-	req('https://www.furaffinity.net/search/', 'POST', function(body) {
+	req('https://www.furaffinity.net/search/', 'POST', function(body,err) {
+		if (err) return callback({success:false,error:'Could not connect!'});
 		const $ = cheerio.load(body);
 		var s = $('figure.r-general.t-image');
 		callback(figure(s));

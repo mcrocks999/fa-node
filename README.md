@@ -24,7 +24,7 @@ var furaffinity = require('furaffinity');
 var category = (['artwork','writing','music','crafts','all'])[0];
 furaffinity.recent(category,function(data){
 	if (!data.success) {
-		msg.reply('An error occured! `'+data.error+'`');
+		// handle data.error
 		return;
 	}
 	// data contains information available below
@@ -37,7 +37,7 @@ var furaffinity = require('furaffinity');
 var query = 'example';
 furaffinity.search(query,function(data){
 	if (!data.success) {
-		msg.reply('An error occured! `'+data.error+'`');
+		// handle data.error
 		return;
 	}
 	// data contains information available below
@@ -75,3 +75,4 @@ err | error | what happen
 --- | --- | ---
 0 | `That is not a valid type!` | You did not use a valid category in your request. (This should be [artwork, writing, music, crafts])
 1 | `No content found!` | Your search did not return any results!
+2 | `Could not connect!` | Cannot connect to the required service!
