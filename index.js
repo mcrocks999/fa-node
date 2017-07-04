@@ -77,7 +77,7 @@ function figure(s,l = 100) {
 		figures.push(data);
 	}
 	figures = shuffleArray(figures);
-	figures.slice(0,l);
+	figures = figures.slice(0,l);
 	return {success:true,figures};
 }
 function get_recent(type,limit,callback) {
