@@ -7,14 +7,6 @@ FurAffinity wrapper for NodeJS
 
 ## Usage
 
-Disabling or customizing cache settings:
-
-```javascript
-var furaffinity = require('furaffinity');
-furaffinity.settings.cache.enabled = true; // Default: true, boolean whether cache should be used
-furaffinity.settings.cache.seconds = 120; // Default: 120, time in seconds to keep pages
-```
-
 To get the most recent content:
 
 > Categories are a variable in the following example.

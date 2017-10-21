@@ -2,35 +2,10 @@
 * FurAffinity for NodeJS
 * Supports getting most recent results and searching up content
 */
-const cheerio = require('cheerio'), request = require('request');
+const cheerio = require('cheerio'),
+	retrieve = require('./retrieve'),
+	{ shuffleArray } = require('./util');
 
-function req(url, method, callback, q) {
-	switch (method) {
-		case 'POST':
-			request.post({url:'https://www.furaffinity.net/search/', form: {q}}, function(err,httpResponse,body) {
-				if (err) return callback(false,err);
-				if (settings.cache.enabled) cache[url+'?q='+q] = {expire:now+settings.cache.seconds,body};
-				callback(body);
-			});
-			break;
-		case 'GET':
-			request('https://furaffinity.net', function (err, response, body) {
-				if (err) return callback(false,err);
-				if (settings.cache.enabled) cache[url+'?q='+q] = {expire:now+settings.cache.seconds,body};
-				callback(body);
-			});
-			break;
-	}
-}
-function shuffleArray(array) {
-    for (var i = array.length - 1; i > 0; i--) {
-        var j = Math.floor(Math.random() * (i + 1));
-        var temp = array[i];
-        array[i] = array[j];
-        array[j] = temp;
-    }
-    return array;
-}
 function figure(s,l = 100) {
 	if (s.length<1) {
 		return {success:false,error:'No content found!'};
@@ -68,6 +43,7 @@ function get_recent(type,limit,callback) {
 	});
 }
 function get_search(q,limit,callback) {
+	retrieve.search(q).then()
 	req('https://www.furaffinity.net/search/', 'POST', function(body,err) {
 		if (err) return callback({success:false,error:'Could not connect!'});
 		const $ = cheerio.load(body);
@@ -75,20 +51,36 @@ function get_search(q,limit,callback) {
 		callback(figure(s,limit));
 	}, q);
 }
+
+function recent(type, limit) {
+	return new Promise((resolve, reject) => {
+		if (type<0 || type>types.length-1) return reject(null, 'Not a valid type!');
+		retrieve.recent(type).then(data => {
+			
+		}).catch(err => {
+			reject(err);
+		});
+	});
+}
+
+function search(query, limit) {
+	return new Promise((resolve, reject) => {
+		retrieve.search(query).then(data => {
+			
+		}).catch(err => {
+			reject(err);
+		});
+	});
+}
+
+const types = {
+	artwork: 0,
+	writing: 1,
+	music: 2,
+	crafts: 3,
+	any: 4
+};
+
 module.exports = {
-	settings,
-	recent: function (type,limit,callback) {
-		switch (type) {
-			case 'artwork': get_recent(0,limit,callback); break;
-			case 'writing': get_recent(1,limit,callback); break;
-			case 'music': get_recent(2,limit,callback); break;
-			case 'crafts': get_recent(3,limit,callback); break;
-			case 'any': get_recent(4,limit,callback); break;
-			default:
-				callback({success:false,error:'That is not a valid type!'});
-		}
-	},
-	search: function (query,limit,callback) {
-		get_search(query,limit,callback);
-	}
+	types, search, recent
 };
