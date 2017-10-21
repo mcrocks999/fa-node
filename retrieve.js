@@ -15,7 +15,7 @@ module.exports = {
             request.post({
                 url: endpoint+'search',
                 form: {
-                    query
+                    q: query
                 }
             }, function(err, res, body) {
 				if (err) return reject(err);

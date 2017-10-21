@@ -39,5 +39,5 @@ const types = {
 };
 
 module.exports = {
-	types, search, recent
+	types, recent, search
 };

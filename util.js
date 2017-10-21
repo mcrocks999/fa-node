@@ -7,5 +7,17 @@ module.exports = {
             array[j] = temp;
         }
         return array;
+    },
+    figure: (obj) => {
+        var figure = obj.children();
+        var a = figure.eq(0).children().eq(0).children().eq(0);
+        var f = figure.eq(1).children();
+        return {
+            url: 'https://furaffinity.net'+a.attr('href'),
+            src: 'https:'+a.children().eq(0).attr('src'),
+            title: f.eq(0).children().eq(0).attr('title'),
+            author: f.eq(1).children().eq(1).attr('title'),
+            authorURL: 'https://furaffinity.net'+f.eq(1).children().eq(1).attr('href')
+        };
     }
 };
