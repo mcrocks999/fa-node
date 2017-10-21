@@ -16,8 +16,10 @@ module.exports = {
             url: 'https://furaffinity.net'+a.attr('href'),
             src: 'https:'+a.children().eq(0).attr('src'),
             title: f.eq(0).children().eq(0).attr('title'),
-            author: f.eq(1).children().eq(1).attr('title'),
-            authorURL: 'https://furaffinity.net'+f.eq(1).children().eq(1).attr('href')
+            author: {
+                name: f.eq(1).children().eq(1).attr('title'),
+                url: 'https://furaffinity.net'+f.eq(1).children().eq(1).attr('href')
+            }
         };
     }
 };
