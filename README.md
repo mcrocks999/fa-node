@@ -13,10 +13,10 @@ To get the most recent content:
 
 ```javascript
 var furaffinity = require('furaffinity');
-furaffinity.recent(furaffinity.types.artwork, limit, (data, err) => {
-	if (err) return; // handle err however needs be
-	// data contains information available below
-});
+var limit = 1;
+furaffinity.recent(furaffinity.types.artwork, limit).then(data) => {
+	data
+}).catch(err => console.log(err));
 ```
 
 Checking available types:
@@ -30,10 +30,10 @@ To search up content:
 ```javascript
 var furaffinity = require('furaffinity');
 var query = 'example';
-furaffinity.search(query, limit, (data, err) => {
-	if (err) return err; // handle err however needs be
-	// data contains information available below
-});
+var limit = 1;
+furaffinity.search(query, limit).then(data => {
+	// data
+}).catch(err => console.log(err));
 ```
 
 ## Sample data
