@@ -1,54 +1,27 @@
 /*
-* FurAffinity NodeJS scraper thing
+* FurAffinity for NodeJS
 * Supports getting most recent results and searching up content
-* By the way, good luck if you want to edit this code, you're going to need it...
 */
 const cheerio = require('cheerio'), request = require('request');
-/*
-* Settings for module
-*/
-var settings = {
-	cache: {
-		enabled: true,
-		seconds: 120,
-	}
-};
-/* Module starts here */
-var cache = {};
-function req(url, method, callback, q) {
-	var now = Date.now() / 1000 | 0;
-	if (typeof cache[url+'?q='+q]==='undefined'||!settings.cache.enabled) {
-		switch (method) {
-			case 'POST':
-				request.post({url:'https://www.furaffinity.net/search/', form: {q}}, function(err,httpResponse,body) {
-					if (err) return callback(false,err);
-					if (settings.cache.enabled) cache[url+'?q='+q] = {expire:now+settings.cache.seconds,body};
-					callback(body);
-				});
-				break;
-			case 'GET':
-				request('https://furaffinity.net', function (err, response, body) {
-					if (err) return callback(false,err);
-					if (settings.cache.enabled) cache[url+'?q='+q] = {expire:now+settings.cache.seconds,body};
-					callback(body);
-				});
-				break;
-		}
-	} else {
-		callback(cache[url+'?q='+q].body);
-	}
-}
 
-function remold() {
-	for (var i=0;i<cache.length;i++) {
-		var now = Date.now() / 1000 | 0;
-		if (now>cache[i].expire)
-			delete cache[i];
+function req(url, method, callback, q) {
+	switch (method) {
+		case 'POST':
+			request.post({url:'https://www.furaffinity.net/search/', form: {q}}, function(err,httpResponse,body) {
+				if (err) return callback(false,err);
+				if (settings.cache.enabled) cache[url+'?q='+q] = {expire:now+settings.cache.seconds,body};
+				callback(body);
+			});
+			break;
+		case 'GET':
+			request('https://furaffinity.net', function (err, response, body) {
+				if (err) return callback(false,err);
+				if (settings.cache.enabled) cache[url+'?q='+q] = {expire:now+settings.cache.seconds,body};
+				callback(body);
+			});
+			break;
 	}
 }
-setInterval(function(){
-	remold();
-},1000*(settings.cache.seconds/4));
 function shuffleArray(array) {
     for (var i = array.length - 1; i > 0; i--) {
         var j = Math.floor(Math.random() * (i + 1));
