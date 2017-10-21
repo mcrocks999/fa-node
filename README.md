@@ -9,66 +9,54 @@ FurAffinity wrapper for NodeJS
 
 To get the most recent content:
 
-> Categories are a variable in the following example.
+> furaffinity.types has all possible results
 
 ```javascript
 var furaffinity = require('furaffinity');
-var category = (['artwork','writing','music','crafts','all'])[0];
-furaffinity.recent(category,limit,function(data){
-	if (!data.success) {
-		// handle data.error
-		return;
-	}
+furaffinity.recent(furaffinity.types.artwork, limit, (data, err) => {
+	if (err) return; // handle err however needs be
 	// data contains information available below
 });
+```
+
+Checking available types:
+
+```javascript
+console.log(Object.keys(furaffinity.types));
+// artwork, writing, music, crafts, any
 ```
 
 To search up content:
 ```javascript
 var furaffinity = require('furaffinity');
 var query = 'example';
-furaffinity.search(query,limit,function(data){
-	if (!data.success) {
-		// handle data.error
-		return;
-	}
+furaffinity.search(query, limit, (data, err) => {
+	if (err) return err; // handle err however needs be
 	// data contains information available below
 });
 ```
 
-## Sample data response
+## Sample data
 
-On success:
 ```json
-{
-	"success": true,
-	"figures": [
-		{
-			"title": "content title",
-			"url": "url_pointing_to_resource",
-			"src": "url_pointing_to_directly_to_image_File",
-			"artist": {
-				"url": "url_pointing_to_artist",
-				"name": "artist_name"
-			}
+[
+	{
+		"title": "content title",
+		"url": "url_pointing_to_resource",
+		"src": "url_pointing_to_directly_to_image_File",
+		"artist": {
+			"url": "url_pointing_to_artist",
+			"name": "artist_name"
 		}
-	]
-}
-```
-
-On failure:
-```json
-{
-	"success": false,
-	"err": 0,
-	"error": "error message"
-}
+	},
+	...
+]
 ```
 
 ## Possible errors:
 
-err | error | what happen
---- | --- | ---
-0 | `That is not a valid type!` | You did not use a valid category in your request. (This should be [artwork, writing, music, crafts])
-1 | `No content found!` | Your search did not return any results!
-2 | `Could not connect!` | Cannot connect to the required service!
+Error | Reason
+--- | ---
+`That is not a valid type!` | You did not use a valid type in your request. (see furaffinity.types)
+`No content found!` | Your search did not return any results!
+`Could not connect!` | Cannot connect to the required service!
