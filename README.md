@@ -7,76 +7,56 @@ FurAffinity wrapper for NodeJS
 
 ## Usage
 
-Disabling or customizing cache settings:
-
-```javascript
-var furaffinity = require('furaffinity');
-furaffinity.settings.cache.enabled = true; // Default: true, boolean whether cache should be used
-furaffinity.settings.cache.seconds = 120; // Default: 120, time in seconds to keep pages
-```
-
 To get the most recent content:
 
-> Categories are a variable in the following example.
+> furaffinity.types has all possible results
 
 ```javascript
 var furaffinity = require('furaffinity');
-var category = (['artwork','writing','music','crafts','all'])[0];
-furaffinity.recent(category,limit,function(data){
-	if (!data.success) {
-		// handle data.error
-		return;
-	}
-	// data contains information available below
-});
+var limit = 1;
+furaffinity.recent(furaffinity.types.artwork, limit).then(data) => {
+	data
+}).catch(err => console.log(err));
+```
+
+Checking available types:
+
+```javascript
+console.log(Object.keys(furaffinity.types));
+// artwork, writing, music, crafts, any
 ```
 
 To search up content:
 ```javascript
 var furaffinity = require('furaffinity');
 var query = 'example';
-furaffinity.search(query,limit,function(data){
-	if (!data.success) {
-		// handle data.error
-		return;
-	}
-	// data contains information available below
-});
+var limit = 1;
+furaffinity.search(query, limit).then(data => {
+	// data
+}).catch(err => console.log(err));
 ```
 
-## Sample data response
+## Sample data
 
-On success:
 ```json
-{
-	"success": true,
-	"figures": [
-		{
-			"title": "content title",
-			"url": "url_pointing_to_resource",
-			"src": "url_pointing_to_directly_to_image_File",
-			"artist": {
-				"url": "url_pointing_to_artist",
-				"name": "artist_name"
-			}
+[
+	{
+		"title": "content title",
+		"url": "url_pointing_to_resource",
+		"src": "url_pointing_to_directly_to_image_File",
+		"artist": {
+			"url": "url_pointing_to_artist",
+			"name": "artist_name"
 		}
-	]
-}
-```
-
-On failure:
-```json
-{
-	"success": false,
-	"err": 0,
-	"error": "error message"
-}
+	},
+	...
+]
 ```
 
 ## Possible errors:
 
-err | error | what happen
---- | --- | ---
-0 | `That is not a valid type!` | You did not use a valid category in your request. (This should be [artwork, writing, music, crafts])
-1 | `No content found!` | Your search did not return any results!
-2 | `Could not connect!` | Cannot connect to the required service!
+Error | Reason
+--- | ---
+`That is not a valid type!` | You did not use a valid type in your request. (see furaffinity.types)
+`No content found!` | Your search did not return any results!
+`Could not connect!` | Cannot connect to the required service!
