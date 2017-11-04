@@ -15,7 +15,7 @@ To get the most recent content:
 var furaffinity = require('furaffinity');
 var limit = 1;
 furaffinity.recent(furaffinity.types.artwork, limit).then(data) => {
-	data
+	// data
 }).catch(err => console.log(err));
 ```
 
@@ -43,8 +43,8 @@ furaffinity.search(query, limit).then(data => {
 	{
 		"title": "content title",
 		"url": "url_pointing_to_resource",
-		"src": "url_pointing_to_directly_to_image_File",
-		"artist": {
+		"src": "url_pointing_to_directly_to_image_file",
+		"author": {
 			"url": "url_pointing_to_artist",
 			"name": "artist_name"
 		}

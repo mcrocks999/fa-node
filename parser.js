@@ -15,9 +15,7 @@ module.exports = {
             }
             var ret = [];
             if (type < 4) ret = parsed[type];
-            else ret = [].concat(parsed.reduce(function(a, b) {
-                return a.concat(b);
-            }, []));
+            else ret = ret.concat(parsed[0],parsed[1],parsed[2],parsed[3]);
             resolve(shuffleArray(ret).slice(0, limit));
         });
     },
